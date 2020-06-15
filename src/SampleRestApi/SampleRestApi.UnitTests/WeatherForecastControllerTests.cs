@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SampleRestApi.Controllers;
 using Xunit;
+using FluentAssertions;
 
 namespace SampleRestApi.UnitTests
 {
@@ -16,8 +17,13 @@ namespace SampleRestApi.UnitTests
 
             var result = sut.Get();
 
-            Assert.NotNull(result);
+            result
+                .Should()
+                .NotBeNull();
 
+            result
+                .Should()
+                .HaveCountGreaterOrEqualTo(1);
         }
     }
 }
