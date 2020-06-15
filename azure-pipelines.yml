@@ -41,10 +41,11 @@ stages:
         - publish: '$(Build.ArtifactStagingDirectory)'
           artifact: WebApp
 
-  - stage: build
+  - stage: dev
     displayName: 'Build API'
+    condition: succeeded('build')
     jobs:
-      - job: build
+      - job: dev
         displayName: Build Artifact
         pool:
           vmImage: 'windows-latest'
