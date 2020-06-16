@@ -44,7 +44,8 @@ stages:
 
   - stage: dev
     displayName: 'Build API'
-    condition: succeeded('build')
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    # condition: succeeded('build')
     jobs:
       - job: dev
         displayName: Build Artifact
