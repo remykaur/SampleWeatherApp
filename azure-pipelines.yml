@@ -16,13 +16,6 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
-        - task: SonarCloudPrepare@1
-          inputs:
-            SonarCloud: 'SonarCloud-MKA'
-            organization: 'wulfland-github'
-            scannerMode: 'MSBuild'
-            projectKey: 'dotnet-core-api-1'
-            projectName: 'dotnet-core-api-1'
         - task: NuGetToolInstaller@1
 
         - task: NuGetCommand@2
@@ -45,12 +38,6 @@ stages:
               !**\obj\**
             searchFolder: '$(System.DefaultWorkingDirectory)'
             codeCoverageEnabled: true
-
-        - task: SonarCloudAnalyze@1
-
-        - task: SonarCloudPublish@1
-          inputs:
-            pollingTimeoutSec: '300'
 
         - publish: '$(Build.ArtifactStagingDirectory)'
           artifact: WebApp
