@@ -49,19 +49,19 @@ stages:
       - job: dev
         displayName: Build Artifact
         pool:
-          vmImage: 'windows-latest'
+          vmImage: 'ubuntu-latest'
         steps:
         - download: current
           artifact: WebApp
         - task: AzureCLI@2
           inputs:
             azureSubscription: 'AzureConnection'
-            scriptType: 'batch'
+            scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
-              az group create --name rg-$(webAppName) --location westeurope
-              az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1
-              az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan
+              az group create --name rg-$(webAppName) --location westeurope;
+              az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1;
+              az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan;
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
