@@ -5,7 +5,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  webAppName: 'mka1234'
+  webAppName: 'mka12345'
 
 stages:
   - stage: build
@@ -60,8 +60,8 @@ stages:
             scriptLocation: 'inlineScript'
             inlineScript: |
               az group create --name rg-$(webAppName) --location westeurope;
-              az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1;
-              az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan;
+              az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1 --is-linux;
+              az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan --runtime "DOTNETCORE|LTS";
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
