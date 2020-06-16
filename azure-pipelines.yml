@@ -68,4 +68,4 @@ stages:
             azureSubscription: 'AzureConnection'
             appType: 'webApp'
             WebAppName: '$(name)'
-            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+            packageForLinux: '$(Pipeline.Workspace)/WebApp/**/*.zip'
