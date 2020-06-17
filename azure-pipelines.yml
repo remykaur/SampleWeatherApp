@@ -21,8 +21,8 @@ stages:
             SonarCloud: 'SonarCloud-MKA'
             organization: 'wulfland-github'
             scannerMode: 'MSBuild'
-            projectKey: 'dotnet-core-api-clh'
-            projectName: 'DontNet Core API CLH'
+            projectKey: 'dotnet-core-api-mka'
+            projectName: 'DontNet Core API MKA'
         - task: NuGetToolInstaller@1
 
         - task: NuGetCommand@2
