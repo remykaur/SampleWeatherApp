@@ -11,6 +11,7 @@ namespace SampleRestApi.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        public string PublicMember { get; set;}
 
         private static readonly string[] Summaries = new[]
         {
