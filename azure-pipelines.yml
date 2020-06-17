@@ -5,7 +5,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  webAppName: 'mka12345'
+  webAppName: 'mka123456'
 
 stages:
   - stage: build
