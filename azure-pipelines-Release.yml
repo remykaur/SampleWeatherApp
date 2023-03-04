@@ -1,0 +1,70 @@
+trigger:
+- master
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  webAppName: 'mka123456'
+
+stages:
+  - stage: build
+    displayName: 'Build API'
+    jobs:
+      - job: build
+        displayName: Build Artifact
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+
+        - task: NuGetToolInstaller@1
+
+        - task: NuGetCommand@2
+          inputs:
+            restoreSolution: '$(solution)'
+
+        - task: VSBuild@1
+          inputs:
+            solution: '$(solution)'
+            msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+            platform: '$(buildPlatform)'
+            configuration: '$(buildConfiguration)'
+
+        - task: VSTest@2
+          inputs:
+            testSelector: 'testAssemblies'
+            testAssemblyVer2: |
+              **\*UnitTests.dll
+              !**\*TestAdapter.dll
+              !**\obj\**
+            searchFolder: '$(System.DefaultWorkingDirectory)'
+            codeCoverageEnabled: true
+
+  - stage: dev
+    displayName: 'Build API'
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    # condition: succeeded('build')
+    jobs:
+      - job: dev
+        displayName: Build Artifact
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+        - download: current
+          artifact: WebApp
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: 'AzureXpiritConnection'
+            scriptType: 'bash'
+            scriptLocation: 'inlineScript'
+            inlineScript: |
+              az group create --name rg-$(webAppName) --location westeurope;
+              az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1 --is-linux;
+              az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan --runtime "DOTNETCORE|LTS";
+        - task: AzureRmWebAppDeployment@4
+          inputs:
+            ConnectionType: 'AzureRM'
+            azureSubscription: 'AzureXpiritConnection'
+            appType: 'webApp'
+            WebAppName: '$(webAppName)'
+            packageForLinux: '$(Pipeline.Workspace)/WebApp/**/*.zip'
