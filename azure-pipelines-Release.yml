@@ -39,14 +39,16 @@ stages:
               !**\obj\**
             searchFolder: '$(System.DefaultWorkingDirectory)'
             codeCoverageEnabled: true
-
+        - publish: '$(Build.ArtifactStagingDirectory)'
+          artifact: WebApp
+          
   - stage: dev
     displayName: 'Build API'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     # condition: succeeded('build')
     jobs:
       - job: dev
-        displayName: Build Artifact
+        displayName: deploy Artifact
         pool:
           vmImage: 'ubuntu-latest'
         steps:
