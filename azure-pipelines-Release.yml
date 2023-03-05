@@ -32,7 +32,7 @@ stages:
           displayName: Testing units
           inputs:
             command: 'test'
-            projects: './src/SampleRestApi/SampleRestApi.UnitTests/'
+            projects: './src/SampleRestApi/SampleRestApi.UnitTests/SampleRestApi.UnitTests.csproj'
             arguments: '-c $(buildConfiguration)'
             publishTestResults: true
         - task: DotNetCoreCLI@2
