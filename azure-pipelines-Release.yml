@@ -61,7 +61,7 @@ stages:
             scriptLocation: 'inlineScript'
             inlineScript: |
               az group create --name rg-$(webAppName) --location westeurope;
-              az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1 --is-linux;
+              az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1 ;
               az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan --runtime "DOTNETCORE|LTS";
             addSpnToEnvironment: true
         - task: AzureRmWebAppDeployment@4
