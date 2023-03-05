@@ -29,12 +29,18 @@ stages:
             projects: '$(solution)'
             arguments: '-c $(buildConfiguration)'
         - task: DotNetCoreCLI@2
-          displayName: Testing units
+          displayName: Test
           inputs:
             command: 'test'
             projects: './src/SampleRestApi/SampleRestApi.UnitTests/SampleRestApi.UnitTests.csproj'
-            arguments: '-c $(buildConfiguration)'
+            arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
             publishTestResults: true
+        - task: PublishCodeCoverageResults@1
+          displayName: 'Publish code coverage report'
+          inputs:
+            codeCoverageTool: 'Cobertura'
+            summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
         - task: DotNetCoreCLI@2
           displayName: publish artefacts
           inputs:
