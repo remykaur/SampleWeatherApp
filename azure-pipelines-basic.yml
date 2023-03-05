@@ -1,3 +1,14 @@
+parameters:
+  - name: image
+    displayName: Pool image
+    values:
+      - windows-latest
+      - ubuntu-latest
+    default: windows-latest
+  - name: tests
+    type: boolean
+    default: false
+    
 trigger: none
 
 variables:
