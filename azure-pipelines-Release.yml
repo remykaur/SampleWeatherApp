@@ -16,29 +16,30 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
-
-        - task: NuGetToolInstaller@1
-
-        - task: NuGetCommand@2
+        - task: DotNetCoreCLI@2
           inputs:
-            restoreSolution: '$(solution)'
-
-        - task: VSBuild@1
+            command: 'restore'
+            projects: '$(solution)'
+            feedsToUse: 'select'
+        - task: DotNetCoreCLI@2
           inputs:
-            solution: '$(solution)'
-            msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-            platform: '$(buildPlatform)'
-            configuration: '$(buildConfiguration)'
-
-        - task: VSTest@2
+            command: 'build'
+            projects: '$(solution)'
+            arguments: '-c $(buildConfiguration)'
+        - task: DotNetCoreCLI@2
           inputs:
-            testSelector: 'testAssemblies'
-            testAssemblyVer2: |
-              **\*UnitTests.dll
-              !**\*TestAdapter.dll
-              !**\obj\**
-            searchFolder: '$(System.DefaultWorkingDirectory)'
-            codeCoverageEnabled: true
+            command: 'test'
+            projects: './src/SampleRestApi/SampleRestApi.UnitTests/'
+            arguments: '-c $(buildConfiguration)'
+            publishTestResults: true
+        - task: DotNetCoreCLI@2
+          inputs:
+            command: 'publish'
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+            publishWebProjects: true
+            workingDirectory: './src/SampleRestApi/SampleRestApi/'
+            zipAfterPublish: true
+
         - publish: '$(Build.ArtifactStagingDirectory)'
           artifact: WebApp
 
