@@ -63,6 +63,7 @@ stages:
               az group create --name rg-$(webAppName) --location westeurope;
               az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1 --is-linux;
               az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan --runtime "DOTNETCORE|LTS";
+            addSpnToEnvironment: true
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
