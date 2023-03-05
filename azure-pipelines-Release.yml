@@ -5,7 +5,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  webAppName: 'mka123456'
+  webAppName: 'WeatherForcastSample'
 
 stages:
   - stage: build
