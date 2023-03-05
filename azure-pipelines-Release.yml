@@ -42,8 +42,8 @@ stages:
         - publish: '$(Build.ArtifactStagingDirectory)'
           artifact: WebApp
 
-  - stage: dev
-    displayName: 'Deploy API'
+  - stage: Release
+    displayName: 'Release API'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     # condition: succeeded('build')
     jobs:
