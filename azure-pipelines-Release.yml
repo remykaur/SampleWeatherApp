@@ -17,22 +17,26 @@ stages:
           vmImage: 'windows-latest'
         steps:
         - task: DotNetCoreCLI@2
+          displayName: Restore packages
           inputs:
             command: 'restore'
             projects: '$(solution)'
             feedsToUse: 'select'
         - task: DotNetCoreCLI@2
+          displayName: build binaries
           inputs:
             command: 'build'
             projects: '$(solution)'
             arguments: '-c $(buildConfiguration)'
         - task: DotNetCoreCLI@2
+          displayName: Testing units
           inputs:
             command: 'test'
             projects: './src/SampleRestApi/SampleRestApi.UnitTests/'
             arguments: '-c $(buildConfiguration)'
             publishTestResults: true
         - task: DotNetCoreCLI@2
+          displayName: publish artefacts
           inputs:
             command: 'publish'
             arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
@@ -56,6 +60,7 @@ stages:
         - download: current
           artifact: WebApp
         - task: AzureCLI@2
+          displayName: Create infrastructure
           inputs:
             azureSubscription: 'Xpirit MPN sponsored Azure(f317d45c-55f5-4341-8d49-990b06d1c9a5)'
             scriptType: 'bash'
@@ -65,6 +70,7 @@ stages:
               az appservice plan create --name $(webAppName)-plan --resource-group rg-$(webAppName) --sku F1 ;
               az webapp create --name $(webAppName) --resource-group rg-$(webAppName) --plan $(webAppName)-plan --runtime "dotnet:7";
         - task: AzureRmWebAppDeployment@4
+          displayName: deploy webapp
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: 'Xpirit MPN sponsored Azure(f317d45c-55f5-4341-8d49-990b06d1c9a5)'
