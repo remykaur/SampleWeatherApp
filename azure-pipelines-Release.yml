@@ -56,7 +56,7 @@ stages:
           artifact: WebApp
         - task: AzureCLI@2
           inputs:
-            azureSubscription: 'AzureXpiritConnection'
+            azureSubscription: 'Xpirit MPN sponsored Azure(f317d45c-55f5-4341-8d49-990b06d1c9a5)'
             scriptType: 'bash'
             scriptLocation: 'inlineScript'
             inlineScript: |
